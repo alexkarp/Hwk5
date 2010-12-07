@@ -8,8 +8,9 @@ public class Graph {
 	private LinkedList<LinkedList<Node>> networks;
 	
 	Graph () {
-		cities = new LinkedList<Node>();
+		this.cities = new LinkedList<Node>();
 		initPoints();
+		//this.debugList(this.cities);
 	}
 	
 	Node boston = new Node("Boston");
@@ -26,20 +27,21 @@ public class Graph {
 		boston.addEdge(hartford);
 		worcester.addEdge(boston);
 		hartford.addEdge(boston);
-		chicago.addEdge(chicago);
-		denver.addEdge(denver);
+		chicago.addEdge(denver);
+		denver.addEdge(chicago);
 		phoenix.addEdge(houston);
 		houston.addEdge(phoenix);
 		houston.addEdge(tulsa);
-		tulsa.addEdge(tulsa);
+		tulsa.addEdge(houston);
 		
-		cities.add(boston);
-		cities.add(worcester);
-		cities.add(chicago);
-		cities.add(denver);
-		cities.add(phoenix);
-		cities.add(houston);
-		cities.add(tulsa);
+		this.cities.add(boston);
+		this.cities.add(worcester);
+		this.cities.add(hartford);
+		this.cities.add(chicago);
+		this.cities.add(denver);
+		this.cities.add(phoenix);
+		this.cities.add(houston);
+		this.cities.add(tulsa);
 	}
 	
 	public LinkedList<LinkedList<Node>> getNetworks() {
@@ -48,6 +50,8 @@ public class Graph {
 		
 		for(Node city: cities) {
 			if (networks.size() == 0) {
+				//System.out.println(city.cityname + " (Started new network)");
+				//this.debugList(city.connects);
 				LinkedList<Node> locations = new LinkedList<Node>();
 				locations.add(city);
 				networks.add(locations);
@@ -55,13 +59,18 @@ public class Graph {
 				boolean foundNetwork = false;
 				for (LinkedList<Node> network: networks) {
 					if (this.connectsToNetwork(network, city)) {
+						//System.out.println(city.cityname + " (Connects to a network)");
 						network.add(city);
 						foundNetwork = true;
 					}
 				}
 				
 				if (!foundNetwork) {
-					unusedCities.add(city);
+					//System.out.println(city.cityname + " (Started new network)");
+					//this.debugList(city.connects);
+					LinkedList<Node> locations = new LinkedList<Node>();
+					locations.add(city);
+					networks.add(locations);
 				}
 			}
 		}
@@ -71,8 +80,13 @@ public class Graph {
 	}
 	
 	private boolean connectsToNetwork(LinkedList<Node> network, Node city) {
+		//if(city.cityname == "Hartford") System.out.println("Here");
+		//System.out.print(city.cityname + " connects to network: ");
+		//this.debugList(network);
+		//System.out.println("");
 		for (Node networkCity: network) {
 			for (Node connectingCity: city.connects) {
+				//System.out.println(networkCity.cityname + " " + connectingCity.cityname);
 				if (networkCity.equals(connectingCity)) {
 					return true;
 				}
@@ -106,5 +120,11 @@ public class Graph {
 		}
 		
 		return (unusedCities.size() > 0) ? retryConnections(): networks;
+	}
+	
+	private void debugList(LinkedList<Node> list) {
+		for (Node city: list) {
+			System.out.println(city.cityname);
+		}
 	}
 }
