@@ -122,6 +122,20 @@ public class Graph {
 		return (unusedCities.size() > 0) ? retryConnections(): networks;
 	}
 	
+	public LinkedList<CityPair> newFlights () {
+		LinkedList<LinkedList<Node>> flights = this.getNetworks();
+		LinkedList<CityPair> newFlights = new LinkedList<CityPair>();
+		Node flight = new Node("Blank City");
+		for(LinkedList<Node> citiesInNetwork: flights) {
+			if (cities.contains(flight)) {
+				newFlights.add(new CityPair(flight, citiesInNetwork.getFirst()));
+			}
+			flight = citiesInNetwork.getFirst();
+		}
+		
+		return newFlights;
+	}
+	
 	private void debugList(LinkedList<Node> list) {
 		for (Node city: list) {
 			System.out.println(city.cityname);

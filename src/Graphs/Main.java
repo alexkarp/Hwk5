@@ -6,7 +6,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		Graph airplanes = new Graph();
-		debugNetworks(airplanes.getNetworks());
+		//debugNetworks(airplanes.getNetworks());
+		debugCityList(airplanes.newFlights());
 	}
 	
 	public static void debugNetworks(LinkedList<LinkedList<Node>> networks) {
@@ -18,6 +19,12 @@ public class Main {
 				i++;
 			}
 			System.out.println("");
+		}
+	}
+	
+	private static void debugCityList(LinkedList<CityPair> list) {
+		for(CityPair pair: list) {
+			System.out.println(pair.city1.cityname + " <-> " + pair.city2.cityname);
 		}
 	}
 
