@@ -1,16 +1,26 @@
 package Graphs;
 
 import java.util.LinkedList;
-
+/**
+ * @author Alexander Karp and Merrielle Ondreicka
+ *
+ */
 public class Graph {
+	/**
+	 * Stores a list of cities.
+	 */
 	private LinkedList<Node> cities;
-	private LinkedList<Node> unusedCities;
+	/**
+	 * Stores a list of networks.
+	 */
 	private LinkedList<LinkedList<Node>> networks;
 	
+	/**
+	 * Initializes the points on the graph.
+	 */
 	Graph () {
 		this.cities = new LinkedList<Node>();
 		initPoints();
-		//this.debugList(this.cities);
 	}
 	
 	Node boston = new Node("Boston");
@@ -44,14 +54,15 @@ public class Graph {
 		this.cities.add(tulsa);
 	}
 	
+	/**
+	 * Groups all of the cities into networks based on which cities can travel to the other ones.
+	 * @return LinkedList<LinkedList<Node>>
+	 */
 	public LinkedList<LinkedList<Node>> getNetworks() {
 		networks = new LinkedList<LinkedList<Node>> ();
-		unusedCities = new LinkedList<Node> ();
 		
 		for(Node city: cities) {
 			if (networks.size() == 0) {
-				//System.out.println(city.cityname + " (Started new network)");
-				//this.debugList(city.connects);
 				LinkedList<Node> locations = new LinkedList<Node>();
 				locations.add(city);
 				networks.add(locations);
@@ -59,15 +70,12 @@ public class Graph {
 				boolean foundNetwork = false;
 				for (LinkedList<Node> network: networks) {
 					if (this.connectsToNetwork(network, city)) {
-						//System.out.println(city.cityname + " (Connects to a network)");
 						network.add(city);
 						foundNetwork = true;
 					}
 				}
 				
 				if (!foundNetwork) {
-					//System.out.println(city.cityname + " (Started new network)");
-					//this.debugList(city.connects);
 					LinkedList<Node> locations = new LinkedList<Node>();
 					locations.add(city);
 					networks.add(locations);
@@ -76,17 +84,17 @@ public class Graph {
 		}
 		
 		return networks;
-		//return (unusedCities.size() > 0) ? retryConnections(): networks;
 	}
 	
+	/**
+	 * Checks to see whether the given city is part of a established network.
+	 * @param network
+	 * @param city
+	 * @return boolean
+	 */
 	private boolean connectsToNetwork(LinkedList<Node> network, Node city) {
-		//if(city.cityname == "Hartford") System.out.println("Here");
-		//System.out.print(city.cityname + " connects to network: ");
-		//this.debugList(network);
-		//System.out.println("");
 		for (Node networkCity: network) {
 			for (Node connectingCity: city.connects) {
-				//System.out.println(networkCity.cityname + " " + connectingCity.cityname);
 				if (networkCity.equals(connectingCity)) {
 					return true;
 				}
@@ -96,32 +104,10 @@ public class Graph {
 		return false;
 	}
 	
-	private LinkedList<LinkedList<Node>> retryConnections() {
-		for(Node city: unusedCities) {
-			if (networks.size() == 0) {
-				LinkedList<Node> locations = new LinkedList<Node>();
-				locations.add(city);
-				networks.add(locations);
-				unusedCities.remove(city);
-			} else {
-				boolean foundNetwork = false;
-				for (LinkedList<Node> network: networks) {
-					if (this.connectsToNetwork(network, city)) {
-						network.add(city);
-						unusedCities.remove(city);
-						foundNetwork = true;
-					}
-				}
-				
-				if (!foundNetwork && !unusedCities.contains(city)) {
-					unusedCities.add(city);
-				}
-			}
-		}
-		
-		return (unusedCities.size() > 0) ? retryConnections(): networks;
-	}
-	
+	/**
+	 * Creates a list of new flights which should be implemented to connect all of the given networks using the least number of additions.
+	 * @return LinkedList<CityPair>
+	 */
 	public LinkedList<CityPair> newFlights () {
 		LinkedList<LinkedList<Node>> flights = this.getNetworks();
 		LinkedList<CityPair> newFlights = new LinkedList<CityPair>();
@@ -134,11 +120,5 @@ public class Graph {
 		}
 		
 		return newFlights;
-	}
-	
-	private void debugList(LinkedList<Node> list) {
-		for (Node city: list) {
-			System.out.println(city.cityname);
-		}
 	}
 }

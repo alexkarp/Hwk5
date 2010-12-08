@@ -6,7 +6,6 @@ public class Main {
 
 	public static void main(String[] args) {
 		Graph airplanes = new Graph();
-		//debugNetworks(airplanes.getNetworks());
 		debugCityList(airplanes.newFlights());
 	}
 	

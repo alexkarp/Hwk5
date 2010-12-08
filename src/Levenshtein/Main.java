@@ -1,5 +1,8 @@
 package Levenshtein;
-
+/**
+ * @author Alexander Karp and Merrielle Ondreicka
+ *
+ */
 public class Main {
 	
 	public static void main(String[] args) {
